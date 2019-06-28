@@ -1,0 +1,553 @@
+{% extends 'pages/base.html' %}
+
+{% block head %}
+<style>
+.chart-container{
+  max-width: 236px;
+}
+.wrap{
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+        html, body {
+            height:100%;
+            width:100%;
+            margin:0;
+            padding:0;
+        }
+        #myChart {
+            height:100%;
+            width:100%;
+            min-height:150px;
+        }
+        .zc-ref {
+            display:none;
+        }
+
+</style>
+{% endblock %}
+
+{% block query %}
+<form action="{% url 'pages:category' %}" method="GET" style="visiblity:hidden">
+    <input type="search" style="text-align: center" autocomplete="off" name="q" id="q" placeholder="{{query}}"
+           required/>
+</form>
+{% endblock %}
+
+{% block body %}
+
+
+<div class="container">
+    <!--    1st row : lineChart-->
+    <div class="row d-flex justify-content-center">
+    {% if query2 %}
+        <div>
+            <div id="myChart1"></div>
+        </div>
+    {% else %}
+        <div>
+            <div id="myChart1"></div>
+        </div>
+    {% endif %}
+    </div>
+
+    <!--    2nd row : PieChart-->
+    <div class="row mt-5">
+    {% if query2 %}
+        <!--  1st PieChart-->
+        <div class="col-6 mt-10">
+            <div title="piechart">
+                <div>
+                    <canvas id="myChart2"></canvas>
+                </div>
+            </div>
+            <div>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+                <script>
+                    var ctx = document.getElementById('myChart2');
+                    var myChart2 = new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: [
+                                {% for j in pie %}
+                                    "{{ j.cat_selected }}",
+                                {% endfor %}
+                            ],
+                            datasets: [{
+                                label: '{{ query }} 기사 카테고리 파이 그래프',
+                                data: [
+                                    {% for j in pie %}
+                                        {{ j.total }},
+                                    {% endfor %}
+                                ],
+                                backgroundColor:[
+                                'rgba(54,162,235,0.2)',
+                                'rgba(255,99,132,0.2)',
+                                'rgba(152,102,255,0.2)',
+                                'rgba(255,159,64,0.2)'],
+                                borderWidth: 3,
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: false,
+                                    }
+                                }]
+                            }
+                        }
+                    });
+                </script>
+            </div>
+        </div>
+        <!--  2nd PieChart-->
+        <div class="col-6 mt-10">
+            <div title="3rdchart">
+                <div>
+                    <canvas id="myChart3"></canvas>
+                </div>
+            </div>
+            <div>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+                <script>
+                    var ctx = document.getElementById('myChart3');
+                    var myChart3 = new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: [
+                                {% for j in pie %}
+                                    "{{ j.cat_selected }}",
+                                {% endfor %}
+                            ],
+                            datasets: [{
+                                label: '{{ query }} 기사 카테고리 파이 그래프',
+                                data: [
+                                    {% for j in pie %}
+                                        {{ j.total }},
+                                    {% endfor %}
+                                ],
+                                backgroundColor:[
+                                'rgba(54,162,235,0.2)',
+                                'rgba(255,99,132,0.2)',
+                                'rgba(152,102,255,0.2)',
+                                'rgba(255,159,64,0.2)'],
+                                borderWidth: 3,
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: false,
+                                    }
+                                }]
+                            }
+                        }
+                    });
+                </script>
+            </div>
+        </div>
+    {% else %}
+        <!--  1st PieChart-->
+        <div class="col-6 offset-3 mt-10">
+            <div title="piechart">
+                <div>
+                    <canvas id="myChart2"></canvas>
+                </div>
+            </div>
+            <div>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+                <script>
+                    var ctx = document.getElementById('myChart2');
+                    var myChart2 = new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: [
+                                {% for j in pie %}
+                                    "{{ j.cat_selected }}",
+                                {% endfor %}
+                            ],
+                            datasets: [{
+                                label: '{{ query }} 기사 카테고리 파이 그래프',
+                                data: [
+                                    {% for j in pie %}
+                                        {{ j.total }},
+                                    {% endfor %}
+                                ],
+                                backgroundColor:[
+                                'rgba(54,162,235,0.2)',
+                                'rgba(255,99,132,0.2)',
+                                'rgba(152,102,255,0.2)',
+                                'rgba(255,159,64,0.2)'],
+                                borderWidth: 3,
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: false,
+                                    }
+                                }]
+                            }
+                        }
+                    });
+                </script>
+            </div>
+        </div>
+    {% endif %}
+    </div>
+
+    <!--    3row : Bar Chart-->
+    <div class="row mt-5">
+    {% if query2 %}
+        <!--  1st BarChart-->
+        <div class="col-6 mt-10">
+            <div title="4thchart">
+                    <div>
+                        <canvas id="myChart4"></canvas>
+                    </div>
+                <div>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+                    <script>
+                        var ctx = document.getElementById('myChart4');
+                        var myChart4 = new Chart(ctx, {
+                            type: 'horizontalBar',
+                            data: {
+                                labels: [
+                                    {% for j in horizontalBar %}
+                                        '{{ j.company }}',
+                                    {% endfor %}
+                                ],
+                                datasets: [{
+                                    label: '{{ query }} 기사 빈도  그래프',
+                                    data:
+                                    [
+                                        {% for j in horizontalBar %}
+                                            {{ j.total }},
+                                        {% endfor %}
+                                    ],
+                                    borderColor:[
+                                    'rgba(54,162,235,0.2)',
+                                    'rgba(130,162,235,0.2)',
+                                    'rgba(20,162,3,0.2)',
+                                    'rgba(1,50,235,0.2)',
+                                    'rgba(270,162,235,0.2)',
+                                    'rgba(54,300,14,0.2)',
+                                    'rgba(54,15,235,0.2)',
+
+                                    ],
+                                    borderWidth: 10,
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: false,
+                                        }
+                                    }]
+                                }
+                            }
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+        <!--  2nd BarChart-->
+        <div class="col-6 mt-10">
+            <div title="5thchart">
+                <div>
+                    <canvas id="myChart5"></canvas>
+                </div>
+            </div>
+            <div>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+                <script>
+                            var ctx = document.getElementById('myChart5');
+                            var myChart5 = new Chart(ctx, {
+                                type: 'horizontalBar',
+                                data: {
+                                    labels: ['한국일보', '전자신문', '중앙일보', '경향신문', '한겨레', '매일경제', '조선일보'],
+                                    datasets: [{
+                                        label: '미래에셋대우 기사 빈도 시계열 그래프',
+                                        data: [43, 18, 15, 14, 12, 8, 5],
+                                        borderColor:[
+                                        'rgba(54,162,235,0.2)',
+                                        'rgba(130,162,235,0.2)',
+                                        'rgba(20,162,3,0.2)',
+                                        'rgba(1,50,235,0.2)',
+                                        'rgba(270,162,235,0.2)',
+                                        'rgba(54,300,14,0.2)',
+                                        'rgba(54,15,235,0.2)',
+
+                                        ],
+                                        borderWidth: 10,
+                                    }]
+                                },
+                                options: {
+                                    scales: {
+                                        yAxes: [{
+                                            ticks: {
+                                                beginAtZero: false,
+                                            }
+                                        }]
+                                    }
+                                }
+                            });
+
+
+                </script>
+            </div>
+        </div>
+    {% else %}
+        <!--  1st BarChart-->
+        <div class="col-6 offset-3 mt-10">
+            <div title="4thchart">
+                    <div>
+                        <canvas id="myChart4"></canvas>
+                    </div>
+                <div>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+                    <script>
+                        var ctx = document.getElementById('myChart4');
+                        var myChart4 = new Chart(ctx, {
+                            type: 'horizontalBar',
+                            data: {
+                                labels: [
+                                    {% for j in horizontalBar %}
+                                        '{{ j.company }}',
+                                    {% endfor %}
+                                ],
+                                datasets: [{
+                                    label: '{{ query }} 기사 빈도  그래프',
+                                    data:
+                                    [
+                                        {% for j in horizontalBar %}
+                                            {{ j.total }},
+                                        {% endfor %}
+                                    ],
+                                    borderColor:[
+                                    'rgba(54,162,235,0.2)',
+                                    'rgba(130,162,235,0.2)',
+                                    'rgba(20,162,3,0.2)',
+                                    'rgba(1,50,235,0.2)',
+                                    'rgba(270,162,235,0.2)',
+                                    'rgba(54,300,14,0.2)',
+                                    'rgba(54,15,235,0.2)',
+
+                                    ],
+                                    borderWidth: 10,
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: false,
+                                        }
+                                    }]
+                                }
+                            }
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    </div>
+
+
+    <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+    <script src="https://cdn.zingchart.com/zingchart-core.min.js"></script>
+    <script>zingchart.MODULESDIR="https://cdn.zingchart.com/modules/";</script>
+    <!--4 row : WordCloud -->
+    <div class="row mt-5">
+    {% if query2 %}
+         <!--1st WordCloud-->
+        <div class="col-6 mt-10">
+               <div id="myChart6"></div>
+                <script>
+                    ZC.LICENSE = ["b55b025e438fa8a98e32482b5f768ff5"];
+                    var myConfig = {
+                        type: 'wordcloud',
+                        options: {
+                            text:'{{ word_cloud }}',
+                            ignore: ['&#39','금지&#39'],
+                        }
+                    };
+
+                    zingchart.render({
+                        id: 'myChart6',
+                        data: myConfig,
+                        height: 400,
+                        width: '100%'
+                    });
+                </script>
+
+        </div>
+        <!--2nd WordCloud-->
+        <div class="col-6 mt-10">
+            <div id="myChart7"></div>
+                <script>
+                    ZC.LICENSE = ["b55b025e438fa8a98e32482b5f768ff5"];
+                    var myConfig2 = {
+                        type: 'wordcloud',
+                        options: {
+                            text:'{{ word_cloud2 }}',
+                            ignore: ['&#39','금지&#39'],
+                        }
+                    };
+
+                    zingchart.render({
+                        id: 'myChart7',
+                        data: myConfig2,
+                        height: 400,
+                        width: '100%'
+                    });
+                </script>
+
+        </div>
+    {% else %}
+        <!--1st WordCloud-->
+        <div class="col-6 offset-3 mt-5">
+           <div id="myChart6"></div>
+            <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+            <script src="https://cdn.zingchart.com/zingchart-core.min.js"></script>
+            <script>zingchart.MODULESDIR="https://cdn.zingchart.com/modules/";</script>
+            <script>
+                ZC.LICENSE = ["b55b025e438fa8a98e32482b5f768ff5"];
+                var myConfig = {
+                    type: 'wordcloud',
+                    options: {
+                        text:'{{ word_cloud }}',
+                        ignore: ['&#39','금지&#39']
+                    }
+                };
+
+                zingchart.render({
+                    id: 'myChart6',
+                    data: myConfig,
+                    height: 400,
+                    width: '100%'
+                });
+    </script>
+
+
+        </div>
+    {% endif %}
+    </div>
+
+    <!--5 row : query 1 articles-->
+    <div class="row mt-5 d-flex justify-content-center">
+        <table>
+            <tr>
+                <th>날짜</th>
+                <th>기사 제목</th>
+            </tr>
+            {% for i in news1 %}
+             <tr>
+                 <th>{{ i.date.year }}-{{i.date.month}}-{{i.date.day}}</th>
+                 <th><a href="#">{{ i.title }}</a></th>
+             </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <!--6 row : query 2 articles -->
+    <div class="row mt-5 d-flex justify-content-center">
+        <table>
+            <tr>
+                <th>날짜</th>
+                <th>기사 제목</th>
+            </tr>
+            {% for j in news2 %}
+             <tr>
+                 <th>{{ j.date.year }}-{{ j.date.month }}-{{ j.date.day }}</th>
+                 <th><a href="#">{{ j.title }}</a></th>
+             </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+        var ctx2 = document.getElementById("myChart1");
+        const x = [
+            {% for i in ts %}
+                '{{ i.date }}',
+            {% endfor %}
+        ];
+        const y = [
+            {% for i in ts %}
+                '{{ i.total }}',
+            {% endfor %}
+        ];
+        const x2 = [
+            {% for j in ts2 %}
+                '{{ j.date }}',
+            {% endfor %}
+        ];
+        const y2 = [
+            {% for j in ts2 %}
+                '{{ j.total }}',
+            {% endfor %}
+        ];
+
+        var trace1 = {
+        type: "scatter",
+        mode: "lines",
+        name: '{{query1}}',
+        x: x,
+        y: y,
+        line: {color: '#17BECF'}
+        }
+
+        var trace2 = {
+        type: "scatter",
+        mode: "lines",
+        name: '{{query2}}',
+        x: x2,
+        y: y2,
+        line: {color: '#7F7F7F'}
+        }
+
+        var data2 = [trace1,trace2];
+
+        var layout = {
+        title: '{{query1}} 빈도 그래프',
+        xaxis: {
+        autorange: true,
+        range: ['2009-01-01', '2019-06-16'],
+        rangeselector: {buttons: [
+        {
+        count: 1,
+        label: '1m',
+        step: 'month',
+        stepmode: 'backward'
+        },
+        {
+        count: 6,
+        label: '6m',
+        step: 'month',
+        stepmode: 'backward'
+        },
+        {step: 'all'}
+        ]},
+        rangeslider: {range: ['2015-02-17', '2019-02-16']},
+        type: 'date'
+        },
+        yaxis: {
+        autorange: true,
+        range: [86.8700008333, 138.870004167],
+        type: 'linear'
+        }
+        };
+
+        Plotly.plot(ctx2, data2, layout);
+    </script>
+    {% endblock %}

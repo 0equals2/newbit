@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Kaushan+Script|Dosis|Noto+Sans+KR|Libre+Baskerville|Old+Standard+TT&display=swap">
+    <style>
+        .tag {
+text-transform: uppercase;
+position: relative;
+line-height: 2.5em;
+padding: 0 1em;
+display: inline-block;
+}
+
+
+.tag-colored {
+background-color: #9a9ba1;
+color: #fff;
+}
+
+.tag:before,
+.tag:after {
+content: "";
+height: 1px;
+/* any width higher than the widest part of the page */
+width: 1000px;
+position: absolute;
+top: 50%;
+display: block;
+}
+
+hr { border-top:1px solid #9C9C9C; border-bottom:1px solid #F6F6F6; }
+        .chart-container {
+            max-width: 236px;
+        }
+
+        .wrap {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #myChart {
+            height: 100%;
+            width: 100%;
+            min-height: 150px;
+        }
+
+        .zc-ref {
+            display: none;
+        }
+
+    </style>
+    <style>
+    .chart-container{
+    max-width: 236px;
+    }
+    .wrap{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    }
+        html, body {
+            height:100%;
+            width:100%;
+            margin:0;
+            padding:0;
+        }
+        #myChart {
+            height:100%;
+            width:100%;
+            min-height:150px;
+        }
+        .zc-ref {
+            display:none;
+        }
+
+    </style>
+    <style type="text/css">
+
+hr { border-top:1px solid #9C9C9C; border-bottom:1px solid #F6F6F6; }
+
+</head>
+<meta charset="UTF-8">
+<title>Title</title>
+</head>
+<style>
+    html,body{
+        font-family: 'Noto Sans KR', sans-serif;
+    }
+    .navbar{
+        height:110px;
+    }
+</style>
+    <style>
+    p.indent{ padding-right: 1.3em }
+    html,body{
+        font-family: 'Noto Sans KR', sans-serif;
+    }
+    .navbar{
+        height:110px;
+    }
+    .chart-container{
+  max-width: 400px;
+}
+.wrap{
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+        html, body {
+            height:100%;
+            width:100%;
+            margin:0;
+            padding:0;
+        }
+
+        #myChart {
+            height:100%;
+            width:200%;
+            min-height:150px;
+
+        }
+
+        .zc-ref {
+            display:none;
+            }
+        table.type09 {
+    border-collapse: collapse;
+    text-align: left;
+    line-height: 1.5;
+
+}
+table.type09 thead th {
+    padding: 10px;
+    font-weight: bold;
+    vertical-align: top;
+    color: #369;
+    border-bottom: 3px solid #036;
+}
+table.type09 tbody th {
+    padding: 10px;
+    font-weight: bold;
+    vertical-align: top;
+    border-bottom: 1px solid #ccc;
+    background: #f3f6f7;
+}
+table.type09 td {
+    width: 350px;
+    padding: 10px;
+    vertical-align: top;
+    border-bottom: 1px solid #ccc;
+}
+
+
+</style>
+<body>
+
+<nav id="navbar" class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
+    <div style="position: absolute; top:15px; left:-50px">
+        <a href="/"><img class="mx-5 px-5 d-flex justify-content-start" src="/static/img/logo_black.png" height="80px" alt="" style="-webkit-filter: invert(100%)"></a>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+        </div>
+    </div>
+</nav>
+
+
+<div class="container">
+    <div class="mt-5 mb-5">
+        <div><p style="font-family: 'Nanum Barun Gothic';"> 키워드 : {{ article.query }} </p></div>
+        <div><p style="font-family: 'Nanum Barun Gothic';"> 카테고리 : {{ article.cat_selected }} </p></div>
+        <hr/>
+    </div>
+
+    <!-- 1st row-->
+    <div class="row d-flex justify-content-center mt-5 mb-5">
+        <div class="col-5 mt-10">
+            <!--word cloud-->
+            <div id="myChart7"></div>
+            <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+            <script src="https://cdn.zingchart.com/zingchart-core.min.js"></script>
+            <script>zingchart.MODULESDIR = "https://cdn.zingchart.com/modules/";</script>
+            <script>
+                ZC.LICENSE = ["b55b025e438fa8a98e32482b5f768ff5"];
+                var myConfig = {
+                    type: 'wordcloud',
+                    options: {
+                        text: '{{ word_cloud3 }}',
+                        ignore: ['&#39', '금지&#39']
+                    }
+                };
+
+                zingchart.render({
+                    id: 'myChart7',
+                    data: myConfig,
+                    height: 400,
+                    width: '100%'
+                });
+            </script>
+        </div>
+        <!--기사본문가져오기-->
+        <div class="col-7 mt-10">
+               <div>
+                <h1>{{ article.title }}</h1>
+                <p>{{ article.content }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2nd row-->
+    <div class="row d-flex justify-content-center mt-5 mb-5">
+        <!--기사목록불러오기-->
+        <div class="col-12 mt-10">
+            <div class="row mt-5 mb-5 d-flex justify-content-center">
+                <table class="type09">
+                    <thead>
+                        <tr>
+                            <th scope="cols" style="width: 100px;">날짜</th>
+                            <th scope="cols" style="width: 400px;">기사제목</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in same_topic %}
+                     <tr>
+                         <th>{{ i.date.year }}-{{i.date.month}}-{{i.date.day }}</th>
+                         <th><a href="{% url 'pages:article'  i.id%}" onclick="window.open(this.href, '_blank', 'left=250, top=100, width=600, height=720, toolbars=no ,scrollbars=no'); return false;">{{i.title}}</a></th>
+                     </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+<!--    차트 끝-->
+
+    <div class="col-6 offset-3 mt-5">
+        <div id="myChart7"></div>
+        <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+        <script src="https://cdn.zingchart.com/zingchart-core.min.js"></script>
+        <script>zingchart.MODULESDIR = "https://cdn.zingchart.com/modules/";</script>
+        <script>
+            ZC.LICENSE = ["b55b025e438fa8a98e32482b5f768ff5"];
+            var myConfig = {
+                type: 'wordcloud',
+                options: {
+                    text: '{{ word_cloud3 }}',
+                    ignore: ['&#39', '금지&#39']
+                }
+            };
+
+            zingchart.render({
+                id: 'myChart7',
+                data: myConfig,
+                height: 400,
+                width: '100%'
+            });
+        </script>
+
+
+    </div>
+</div>
+</body>
+</html>

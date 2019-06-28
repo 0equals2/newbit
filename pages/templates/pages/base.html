@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Kaushan+Script|Dosis|Noto+Sans+KR|Libre+Baskerville|Old+Standard+TT&display=swap">
+    <link href="https://fonts.googleapis.com/css?family=Cute+Font|Gamja+Flower|Do+Hyeon|East+Sea+Dokdo|Jua|Song+Myung&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/font-nanum/1.0/nanumbarungothic/nanumbarungothic.css">
+    <style>
+    p.indent{ padding-right: 1.3em }
+    html,body{
+        font-family: 'Noto Sans KR', sans-serif;
+    }
+    .navbar{
+        height:110px;
+    }
+        .chart-container{
+  max-width: 400px;
+}
+.wrap{
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+        html, body {
+            height:100%;
+            width:100%;
+            margin:0;
+            padding:0;
+        }
+
+        #myChart {
+            height:100%;
+            width:200%;
+            min-height:150px;
+
+        }
+
+        .zc-ref {
+            display:none;
+            }
+        table.type09 {
+    border-collapse: collapse;
+    text-align: left;
+    line-height: 1.5;
+
+}
+table.type09 thead th {
+    padding: 10px;
+    font-weight: bold;
+    vertical-align: top;
+    color: #369;
+    border-bottom: 3px solid #036;
+}
+table.type09 tbody th {
+    padding: 10px;
+    font-weight: bold;
+    vertical-align: top;
+    border-bottom: 1px solid #ccc;
+    background: #f3f6f7;
+}
+table.type09 td {
+    width: 350px;
+    padding: 10px;
+    vertical-align: top;
+    border-bottom: 1px solid #ccc;
+}
+
+
+hr { border-top:1px solid #9C9C9C; border-bottom:1px solid #F6F6F6; }
+{% block head %}
+{% endblock %}
+</style>
+</head>
+
+<body>
+
+<nav id="navbar" class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
+    <div style="position: absolute; top:15px; left:-50px">
+        <a href="/"><img class="mx-5 px-5 d-flex justify-content-start" src="/static/img/logo_black.png" height="80px" alt="" style="-webkit-filter: invert(100%)"></a>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <!--      <a class="nav-item nav-link active mx-4" href="{% url 'pages:dashboard' %}">Home<span class="sr-only">(current)</span></a>-->
+            <a class="nav-item nav-link {%if request.resolver_match.url_name == 'index'%}active{%endif%} mx-4" onclick="window.location='{% url 'pages:index' %}';">Home<span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link {%if request.resolver_match.url_name == 'dashboard'%}active{%endif%} mx-4" onclick="window.location='{% url 'pages:dashboard' %}'+window.location.search;">Chart<span class="sr-only">(current)</span></a>
+
+        </div>
+    </div>
+</nav>
+
+<div class="row">
+    <div class="col-12 mt-3 mb-3 d-flex justify-content-around">
+        <div class="card">
+            <div class="card-header">
+                &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;검색어&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;비교검색어
+            </div>
+            <div class="card-body" style="width:70rem;">
+                <form  method="GET" style="visiblity:hidden">
+                    <div class="col d-flex justify-content-around">
+                        <div>
+                            <input type="search" style="text-align: center" autocomplete="off" name="q1" id="q1" value="{{query1}}" required/>
+                        </div>
+                        <div>
+                            <input type="search" style="text-align: center" autocomplete="off" name="q2" id="q2" {% if query2 %}value="{{query2}}" {% endif %}>
+                            <button type="submit" class="btn btn-light"> 검색 </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<div class="row d-flex align-items-center" >-->
+<!--    <div class="col-12 mt-3 d-flex justify-content-around ">-->
+<!--        <form  method="GET" style="visiblity:hidden">-->
+<!--            <div class="col d-flex justify-content-center align-items-stretch" style="">-->
+<!--                <div>-->
+<!--                    <input type="search" class="input" style="text-align: center" autocomplete="off" name="q1" id="q1" value="{{query1}}" required/>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    <input type="search" class="input" style="text-align: center" autocomplete="off" autofocus="on" name="q2" id="q2" {% if query2 %}value="{{query2}}" {% endif %}>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    <button type="submit" class="search-button"><i class="fa fa-search-plus fa-2x" ></i></button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </form>-->
+<!--    </div>-->
+<!--</div>-->
+<!--</div>-->
+
+
+
+
+<div class="d-flex align-items-stretch justify-content-center mt-2">
+    <nav aria-label="breadcrumb">
+        <form method="get" name="cat">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/dashboard/?q1={{query1}}{% if query2 %}&q2={{query2}}{% endif %}">전체</a></li>
+            <li class="breadcrumb-item"><a href="/dashboard/?q1={{query1}}{% if query2 %}&q2={{query2}}{% endif %}&cat=경제">경제</a></li>
+            <li class="breadcrumb-item"><a href="/dashboard/?q1={{query1}}{% if query2 %}&q2={{query2}}{% endif %}&cat=IT_과학">IT_과학</a></li>
+            <li class="breadcrumb-item"><a href="/dashboard/?q1={{query1}}{% if query2 %}&q2={{query2}}{% endif %}&cat=지역">지역</a></li>
+            <li class="breadcrumb-item"><a href="/dashboard/?q1={{query1}}{% if query2 %}&q2={{query2}}{% endif %}&cat=사회">사회</a></li>
+            <li class="breadcrumb-item"><a href="/dashboard/?q1={{query1}}{% if query2 %}&q2={{query2}}{% endif %}&cat=문화">문화</a></li>
+            <li class="breadcrumb-item"><a href="/dashboard/?q1={{query1}}{% if query2 %}&q2={{query2}}{% endif %}&cat=국제">국제</a></li>
+        </ol>
+        </form>
+    </nav>
+</div>
+
+
+<div class="d-flex justify-content-center mt-5 mb-5" style="top:0px" >
+    <div class="card mx-2 " style="width: 15rem; height:20rem;border:0px; border-radius: 2%">
+        <div class="card-body" style="box-shadow: 0px 10px 10px 0 #263248;" >
+        <img class="mx-5 px-5" src="/static/img/notepad.png" height="90px" alt="" style="opacity:0.7;position:relative; top:50px; left:-37px">
+        <h5 class="card-title" style="font-family: 'Dosis', sans-serif; text-justify:bottom ;text-align: center;position:absolute; left:95px;bottom: 90px;; font-weight: bold; font-size:20px">Articles</h5>
+        <p class="card-text" style="text-align: center;position:absolute; left:50px;bottom: 25px;">총{% if query2 %}{{sum1}}{% else %}{{num1}}{% endif %} 개의 기사를<br>크롤링하여 수집, 분석</p>
+        </div>
+    </div>
+    <div class="card mx-2" style="width: 15rem;height:20rem;border:0px;border-radius: 2`%">
+        <div class="card-body" style="box-shadow: -3px 10px 10px 0 #263248;" >
+        <img class="mx-5 px-5" src="/static/img/timeline2.png" height="90px" alt="" style="opacity:0.7 ;position:relative;top:50px; left:-37px">
+        <h5 class="card-title" style="font-family: 'Dosis', sans-serif; text-align: center;position:absolute; left:90px;bottom: 90px;; font-weight: bold; font-size:20px;">Period</h5>
+        <p class="card-text"  style="text-align: center;position:absolute; left:50px;bottom: 25px;">2009년 1월 1일부터<br>2019년까지의 기사<br></p>
+        </div>
+    </div>
+    <div class="card mx-2" style="width: 15rem;height:20rem; border:0px;border-radius: 2%">
+        <div class="card-body" style="box-shadow: -4px 10px 10px 0 #263248;" > <!--  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24) -->
+        <img class="mx-5 px-5" src="/static/img/office.png" height="90px" alt=""style="opacity:0.7;position:relative; top:50px; left:-37px">
+        <h5 class="card-title" style="font-family: 'Dosis', sans-serif;text-align: center;position:absolute; left:95px;bottom: 90px; font-weight: bold; font-size:20px">Media</h5>
+        <p class="card-text"  style="text-align: center;position:absolute; left:35px;bottom: 25px;">19개의 언론사<br>(중앙지 11社, 경제지 8社)</p>
+        </div>
+    </div>
+    <div class="card mx-2" style="width: 15rem;height:20rem; border:0px;border-radius: 2%">
+        <div class="card-body" style="box-shadow: -4px 10px 10px 0 #263248;" > <!--  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24) -->
+        <img class="mx-5 px-5" src="/static/img/chat.png" height="90px" alt=""style="opacity:0.7;position:relative;top:50px; left:-37px">
+        <h5 class="card-title" style="font-family: 'Dosis', sans-serif;text-align: center;position:absolute; left:95px;bottom: 90px; font-weight: bold; font-size:20px">Topics</h5>
+        <p class="card-text"  style="text-align: center;position:absolute; left:40px;bottom: 13px;">{% if query2 %}{{sum1}}{% else %}{{num1}}{% endif %}개의 기사를<br>8개의 카테고리로 분류 후<br>{% if query2 %}{{sum2}}{% else %}{{num2}}{% endif %}개의 토픽으로 세분화</p>
+        </div>
+    </div>
+</div>
+
+
+{% block body %}
+{% endblock %}
+
+<script>
+
+</script>
+
+</body>
+</html>
