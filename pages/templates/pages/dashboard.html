@@ -708,7 +708,7 @@ hr { border-top:1px solid #9C9C9C; border-bottom:1px solid #F6F6F6; }
                     {% endfor %}
                 ],
                 datasets: [{
-                    label: "'{{ query }}' 기사 빈도  그래프",
+                    label: "'{{ query1 }}' 기사 빈도  그래프",
                     data:
                     [
                         {% for j in horizontalBar %}
@@ -773,7 +773,7 @@ hr { border-top:1px solid #9C9C9C; border-bottom:1px solid #F6F6F6; }
         var trace1 = {
         type: "scatter",
         mode: "lines",
-        name: '{{query}}',
+        name: '{{query1}}',
         x: x,
         y: y,
         line: {color: '#17BECF'}
