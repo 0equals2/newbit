@@ -72,6 +72,58 @@ table.type09 td {
 
 
 hr { border-top:1px solid #9C9C9C; border-bottom:1px solid #F6F6F6; }
+
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  outline: 0;
+  box-shadow: none;
+  border: 0 !important;
+  background: #2c3e50;
+  background-image: none;
+}
+/* Remove IE arrow */
+select::-ms-expand {
+  display: none;
+}
+/* Custom Select */
+.select {
+  position: relative;
+  display: flex;
+  width: 20em;
+  height: 3em;
+  line-height: 3;
+  background: #2c3e50;
+  overflow: hidden;
+  border-radius: .25em;
+}
+select {
+  flex: 1;
+  padding: 0 .5em;
+  color: #fff;
+  cursor: pointer;
+}
+/* Arrow */
+.select::after {
+  content: '\25BC';
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0 1em;
+  background: #34495e;
+  cursor: pointer;
+  pointer-events: none;
+  -webkit-transition: .25s all ease;
+  -o-transition: .25s all ease;
+  transition: .25s all ease;
+}
+/* Transition */
+.select:hover::after {
+  color: #f39c12;
+}
 {% block head %}
 {% endblock %}
 </style>
@@ -80,8 +132,8 @@ hr { border-top:1px solid #9C9C9C; border-bottom:1px solid #F6F6F6; }
 <body>
 
 <nav id="navbar" class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
-    <div style="position: absolute; top:15px; left:-50px">
-        <a href="/"><img class="mx-5 px-5 d-flex justify-content-start" src="/static/img/logo_black.png" height="80px" alt="" style="-webkit-filter: invert(100%)"></a>
+    <div class="p-2">
+        <a href="/"><img class="" src="/static/img/logo_black.png" height="80px" alt="" style="-webkit-filter: invert(100%)"></a>
     </div>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -99,21 +151,26 @@ hr { border-top:1px solid #9C9C9C; border-bottom:1px solid #F6F6F6; }
 <div class="row">
     <div class="col-12 mt-3 mb-3 d-flex justify-content-around">
         <div class="card">
-            <div class="card-header">
-                &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;검색어&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;비교검색어
+            <div class="card-header d-flex justify-content-around">
+<!--                &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;검색어&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;비교검색어-->
+                <p>검색어</p>
+                <p>비교검색어</p>
             </div>
             <div class="card-body" style="width:70rem;">
-                <form  method="GET" style="visiblity:hidden">
-                    <div class="col d-flex justify-content-around">
-                        <div>
-                            <input type="search" style="text-align: center" autocomplete="off" name="q1" id="q1" value="{{query1}}" required/>
-                        </div>
-                        <div>
-                            <input type="search" style="text-align: center" autocomplete="off" name="q2" id="q2" {% if query2 %}value="{{query2}}" {% endif %}>
-                            <button type="submit" class="btn btn-light"> 검색 </button>
-                        </div>
-                    </div>
-                </form>
+            <section class="d-flex justify-content-around">
+                <div class="select">
+                        <select id="slct" onchange="getSelectedValue()">
+                            <option selected disabled>{{query1}}</option>
+                            {% for o in query %}<option value="{{o}}">{{o}}</option>{% endfor %}
+                        </select>
+                </div>
+                <div class="select">
+                        <select id="slct2" onchange="getSelectedValue2()">
+                            <option selected disabled>{{query2}}</option>
+                            {% for o in query %}<option value="{{o}}">{{o}}</option>{% endfor %}
+                        </select>
+                </div>
+                </section>
             </div>
         </div>
     </div>
@@ -157,45 +214,85 @@ hr { border-top:1px solid #9C9C9C; border-bottom:1px solid #F6F6F6; }
     </nav>
 </div>
 
-
-<div class="d-flex justify-content-center mt-5 mb-5" style="top:0px" >
+<section class="p-5">
+<div class="d-flex justify-content-center d-flex align-items-center" >
     <div class="card mx-2 " style="width: 15rem; height:20rem;border:0px; border-radius: 2%">
         <div class="card-body" style="box-shadow: 0px 10px 10px 0 #263248;" >
-        <img class="mx-5 px-5" src="/static/img/notepad.png" height="90px" alt="" style="opacity:0.7;position:relative; top:50px; left:-37px">
-        <h5 class="card-title" style="font-family: 'Dosis', sans-serif; text-justify:bottom ;text-align: center;position:absolute; left:95px;bottom: 90px;; font-weight: bold; font-size:20px">Articles</h5>
-        <p class="card-text" style="text-align: center;position:absolute; left:50px;bottom: 25px;">총{% if query2 %}{{sum1}}{% else %}{{num1}}{% endif %} 개의 기사를<br>크롤링하여 수집, 분석</p>
+        <div class="d-flex justify-content-center p-3">
+            <img class="" src="/static/img/notepad.png" height="90px" alt="신문기사" style="opacity:0.7;">
+        </div>
+        <div class="p-2"></div>
+        <div>
+            <h5 class="card-title" style="font-family: 'Dosis', sans-serif; text-justify:bottom ;text-align: center;font-weight: bold; font-size:20px">Articles</h5>
+        </div>
+        <div>
+            <p class="card-text" style="text-align: center;position:absolute; left:50px;bottom: 25px;">총{% if query2 %}{{sum1}}{% else %}{{num1}}{% endif %} 개의 기사를<br>크롤링하여 수집, 분석</p>
+        </div>
         </div>
     </div>
-    <div class="card mx-2" style="width: 15rem;height:20rem;border:0px;border-radius: 2`%">
+    <div class="card mx-2" style="width: 15rem;height:20rem;border:0px;border-radius: 2%">
         <div class="card-body" style="box-shadow: -3px 10px 10px 0 #263248;" >
-        <img class="mx-5 px-5" src="/static/img/timeline2.png" height="90px" alt="" style="opacity:0.7 ;position:relative;top:50px; left:-37px">
-        <h5 class="card-title" style="font-family: 'Dosis', sans-serif; text-align: center;position:absolute; left:90px;bottom: 90px;; font-weight: bold; font-size:20px;">Period</h5>
-        <p class="card-text"  style="text-align: center;position:absolute; left:50px;bottom: 25px;">2009년 1월 1일부터<br>2019년까지의 기사<br></p>
+        <div class="d-flex justify-content-center p-3">
+            <img src="/static/img/timeline2.png" height="90px" alt="기간" style="opacity:0.7;">
+        </div>
+        <div class="p-2"></div>
+        <div>
+            <h5 class="card-title" style="font-family: 'Dosis', sans-serif; text-align: center;font-weight: bold; font-size:20px;">Period</h5>
+        </div>
+        <div>
+            <p class="card-text"  style="text-align: center;position:absolute; left:50px;bottom: 25px;">2009년 1월 1일부터<br>2019년까지의 기사<br></p>
+        </div>
         </div>
     </div>
     <div class="card mx-2" style="width: 15rem;height:20rem; border:0px;border-radius: 2%">
         <div class="card-body" style="box-shadow: -4px 10px 10px 0 #263248;" > <!--  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24) -->
-        <img class="mx-5 px-5" src="/static/img/office.png" height="90px" alt=""style="opacity:0.7;position:relative; top:50px; left:-37px">
-        <h5 class="card-title" style="font-family: 'Dosis', sans-serif;text-align: center;position:absolute; left:95px;bottom: 90px; font-weight: bold; font-size:20px">Media</h5>
-        <p class="card-text"  style="text-align: center;position:absolute; left:35px;bottom: 25px;">19개의 언론사<br>(중앙지 11社, 경제지 8社)</p>
+        <div class="d-flex justify-content-center p-3">
+            <img class="mx-5 px-5" src="/static/img/office.png" height="90px" alt="신문사"style="opacity:0.7;">
+        </div>
+        <div class="p-2"></div>
+        <div>
+            <h5 class="card-title" style="font-family: 'Dosis', sans-serif;text-align: center; font-weight: bold; font-size:20px">Media</h5>
+        </div>
+        <div>
+            <p class="card-text"  style="text-align: center;position:absolute; left:35px;bottom: 25px;">19개의 언론사<br>(중앙지 11社, 경제지 8社)</p>
+        </div>
         </div>
     </div>
     <div class="card mx-2" style="width: 15rem;height:20rem; border:0px;border-radius: 2%">
         <div class="card-body" style="box-shadow: -4px 10px 10px 0 #263248;" > <!--  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24) -->
-        <img class="mx-5 px-5" src="/static/img/chat.png" height="90px" alt=""style="opacity:0.7;position:relative;top:50px; left:-37px">
-        <h5 class="card-title" style="font-family: 'Dosis', sans-serif;text-align: center;position:absolute; left:95px;bottom: 90px; font-weight: bold; font-size:20px">Topics</h5>
-        <p class="card-text"  style="text-align: center;position:absolute; left:40px;bottom: 13px;">{% if query2 %}{{sum1}}{% else %}{{num1}}{% endif %}개의 기사를<br>8개의 카테고리로 분류 후<br>{% if query2 %}{{sum2}}{% else %}{{num2}}{% endif %}개의 토픽으로 세분화</p>
+        <div class="d-flex justify-content-center p-3">
+            <img class="mx-5 px-5" src="/static/img/chat.png" height="90px" alt="토픽" style="opacity:0.7;">
+        </div>
+        <div class="p-2"></div>
+        <div>
+            <h5 class="card-title" style="font-family: 'Dosis', sans-serif;text-align: center; font-weight: bold; font-size:20px">Topics</h5>
+        </div>
+        <div>
+            <p class="card-text"  style="text-align: center;position:absolute; left:40px;bottom: 13px;">{% if query2 %}{{sum1}}{% else %}{{num1}}{% endif %}개의 기사를<br>8개의 카테고리로 분류 후<br>{% if query2 %}{{sum2}}{% else %}{{num2}}{% endif %}개의 토픽으로 세분화</p>
+        </div>
         </div>
     </div>
 </div>
-
+</section>
 
 {% block body %}
 {% endblock %}
 
+
 <script>
+    function getSelectedValue()
+    {
+        var selectedValue = document.getElementById("slct").value;
+        document.location.href = '/dashboard/?q1='+ selectedValue {% if query2 %} + '&q2={{query2}}' {% endif %}
+    }
+    function getSelectedValue2()
+    {
+        var selectedValue2 = document.getElementById("slct2").value;
+        document.location.href = '/dashboard/?q1={{query1}}&q2='+ selectedValue2
+    }
 
 </script>
+
 
 </body>
 </html>
